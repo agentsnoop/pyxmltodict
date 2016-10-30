@@ -57,10 +57,10 @@ def _parse_lxml(data, omit_namespaces=False):
 		return False
 
 	if data:
-		root 			= etree.fromstring(data)
+		root 		= etree.fromstring(data)
 		tmp_results 	= _iter_nodes_lxml(root, OrderedDict(), omit_namespaces)
 
-		root_name 		= _convert_name(root.tag, root.prefix, root.nsmap, omit_namespaces)
+		root_name 	= _convert_name(root.tag, root.prefix, root.nsmap, omit_namespaces)
 		root_results 	= _find_node_data_lxml(root, omit_namespaces)
 		tmp_results.update(root_results)
 
@@ -173,7 +173,7 @@ def _parse_libxml2(data, omit_namespaces=False):
 		return False
 
 	if data:
-		doc		= libxml2.parseDoc(str(data))
+		doc	= libxml2.parseDoc(str(data))
 		data 	= _iter_nodes_libxml2(doc.getRootElement(), OrderedDict(), omit_namespaces)
 		return data
 	return False
