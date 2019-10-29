@@ -57,7 +57,8 @@ def _parse_lxml(root, dict_constructor, omit_namespaces=False):
 	"""
 	Parses a string representation of an XML file into a dictionary
 
-	:param string data: Contents of XML file
+	:param object root: Root object of XML data
+	:param class dict_constructor: Dictionary constructor to use for data.
 	:param bool omit_namespaces: Whether or not to include namespace data in the keys
 	:return: XML file as OrderedDict
 	:rtype: OrderedDict
@@ -83,6 +84,7 @@ def _iter_elements_lxml(root, results, dict_constructor, omit_namespaces=False):
 
 	:param XmlElement root: Node to iterate through
 	:param dict results: Parent dictionary holding results
+	:param class dict_constructor: Dictionary constructor to use for data.
 	:param bool omit_namespaces: Whether or not to include namespace data in the keys
 	:return: Dictionary with appended data
 	:rtype: dict
@@ -109,7 +111,8 @@ def _get_element_data_lxml(element, dict_constructor, omit_namespaces=False):
 	"""
 	Internal method for retriving data from an XML node
 
-	:param XmlElement node:
+	:param XmlElement element: XML Elment to get data from
+	:param class dict_constructor: Dictionary constructor to use for data.
 	:param bool omit_namespaces: Whether or not to include namespace data in the keys
 	:return: Dictionary holding data from the node
 	:rtype: dict
@@ -168,7 +171,8 @@ def _parse_libxml2(data, dict_constructor, omit_namespaces=False):
 	"""
 	Parses the contents of an XML file into a dictionary
 
-	:param string path: Path to XML file
+	:param string data: XML string data to parse
+	:param class dict_constructor: Dictionary constructor to use for data.
 	:param bool omit_namespaces: Whether or not to include namespace data in the keys
 	:return: XML file as OrderedDict
 	:rtype: OrderedDict
@@ -180,31 +184,13 @@ def _parse_libxml2(data, dict_constructor, omit_namespaces=False):
 	doc	= libxml2.parseDoc(str(data))
 	return _iter_elements_libxml2(doc.getRootElement(), dict_constructor(), dict_constructor, omit_namespaces)
 
-def _parse_libxml2(data, omit_namespaces=False):
-	"""
-	Parses a string representation of an XML file into a dictionary
-
-	:param string data: Contents of XML file
-	:param bool omit_namespaces: Whether or not to include namespace data in the keys
-	:return: XML file as OrderedDict
-	:rtype: OrderedDict
-	"""
-	if libxml2 is None:
-		print("Unable to load XML: libxml2 not installed")
-		return False
-
-	if data:
-		doc	= libxml2.parseDoc(str(data))
-		data 	= _iter_nodes_libxml2(doc.getRootElement(), OrderedDict(), omit_namespaces)
-		return data
-	return False
-
 def _iter_elements_libxml2(element, results, dict_constructor, omit_namespaces=False):
 	"""
 	Internal method for iterating through XML nodes
 
-	:param XmlElement node: Node to iterate through
+	:param XmlElement element: Node to iterate through
 	:param dict results: Parent dictionary holding results
+	:param class dict_constructor: Dictionary constructor to use for data.
 	:param bool omit_namespaces: Whether or not to include namespace data in the keys
 	:return: Dictionary with appended data
 	:rtype: dict
@@ -229,7 +215,8 @@ def _get_element_data_libxml2(element, dict_constructor, omit_namespaces=False):
 	"""
 	Internal method for retriving data from an XML node
 
-	:param XmlElement node:
+	:param XmlElement element: XML Elment to get data from
+	:param class dict_constructor: Dictionary constructor to use for data.
 	:param bool omit_namespaces: Whether or not to include namespace data in the keys
 	:return: Dictionary holding data from the node
 	:rtype: dict
@@ -277,6 +264,7 @@ def _parse_lxml_fork(data, dict_constructor, omit_namespaces=False):
 	Parses a string representation of an XML file into a dictionary
 
 	:param ElementTree data: Contents of XML file
+	:param class dict_constructor: Dictionary constructor to use for data.
 	:param bool omit_namespaces: Whether or not to include namespace data in the keys
 	:return: XML file as OrderedDict
 	:rtype: OrderedDict
@@ -337,6 +325,9 @@ def _parse_lxml_fork(data, dict_constructor, omit_namespaces=False):
 	return root
 
 def _find_parent(last_parent, levels, root, dict_constructor):
+	"""
+	Finds matching parent of an element
+	"""
 	if len(levels) > 0 and levels[-1][2] == last_parent[1]:
 		return last_parent[0], last_parent
 
